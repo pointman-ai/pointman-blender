@@ -1,0 +1,78 @@
+# Blender: the Python node's previews (its agent/blender.py, gone in MB-355) plus background renders.
+# Format: docs/dev/extensions.md. Render needs from scene, thread 868 [1821].
+
+[extension]
+id = "blender"
+name = "Blender"
+version = "0.1.1"
+publisher = "aurelio"
+summary = "Previews and USDZ for 3D files, and background renders that resume, with live progress per GPU."
+node = ">=0.1,<1"
+platforms = ["macos-arm64", "linux-x86_64", "windows-x86_64"]
+
+[run]
+command = ["python", "-m", "pointman_blender"]
+runtime = "python3.12"
+
+[detect]
+macos = ["/Applications/Blender.app"]
+linux = ["/run/current-system/sw/bin/blender", "/usr/bin/blender", "/opt/blender/blender"]
+windows = ["C:/Program Files/Blender Foundation"]
+
+[permissions]
+gpu = true
+
+[settings]
+type = "object"
+
+[settings.properties.blender_path]
+type = "string"
+title = "Blender"
+description = "Found automatically; set it to use another install."
+
+[settings.properties.device]
+type = "string"
+title = "Render device"
+description = "Set on every render, since Blender keeps it in its preferences, not the .blend."
+enum = ["auto", "METAL", "OPTIX", "CUDA", "HIP", "ONEAPI", "CPU"]
+default = "auto"
+
+[[commands]]
+kind = "blender.preview"
+title = "Preview a 3D file"
+params = { type = "object", required = ["file"], properties = { file = { type = "string", description = "A path on this machine." }, thread_id = { type = "integer" } } }
+lane = "blender_preview"
+cancellable = true
+outputs = ["model", "image"]
+
+[[commands]]
+kind = "blender.render"
+title = "Render"
+params = { type = "object", required = ["file"], properties = { file = { type = "string" }, frames = { type = "string", description = "As 1-250 or 1,5,10-20; the scene's range if left out." }, scene = { type = "string" }, camera = { type = "string" }, samples = { type = "integer", minimum = 1 }, output = { type = "string", description = "A folder on this machine; frames already there are kept, so a render can be shared or resumed." }, thread_id = { type = "integer", description = "Post the result in this thread." } } }
+lane = "gpu"
+cancellable = true
+resumable = true
+outputs = ["sequence", "progress"]
+
+[[tools]]
+name = "blender_preview"
+command = "blender.preview"
+description = "Make a preview still and a USDZ (opens in 3D and AR on the phone) from a .blend, .glb, .gltf, .fbx, .obj or .usd file."
+
+[[tools]]
+name = "blender_render"
+command = "blender.render"
+description = "Render a .blend's frames in the background on this node's GPU. Frames already rendered are kept, so it resumes after a stop and two machines can share a range. Progress shows on the board; returns the request's id."
+
+[[events]]
+name = "blender.status"
+description = "Blender's version and path, the GPUs and the device in use, and what else is using each GPU (Resolve, another render)."
+
+[[files]]
+extensions = [".blend"]
+open_with = "Blender"
+preview = "blender.preview"
+
+[[files]]
+extensions = [".glb", ".gltf", ".fbx", ".obj", ".usd", ".usda", ".usdc", ".usdz"]
+preview = "blender.preview"
