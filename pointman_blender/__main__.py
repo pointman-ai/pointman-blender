@@ -19,10 +19,7 @@ import time
 from collections import deque
 from pathlib import Path
 
-try:
-    from pointman_extension import Cancelled, Extension, Retry
-except ImportError:                 # a node from before the rename (thread 2255 [3561])
-    from mb_extension import Cancelled, Extension, Retry  # type: ignore[no-redef]
+from pointman_extension import Cancelled, Extension, Retry
 
 ext = Extension()
 HERE = Path(__file__).resolve().parent
