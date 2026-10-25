@@ -4,10 +4,10 @@
 [extension]
 id = "blender"
 name = "Blender"
-version = "0.1.1"
+version = "0.2.0"
 publisher = "aurelio"
 summary = "Previews and USDZ for 3D files, and background renders that resume, with live progress per GPU."
-node = ">=0.1,<1"
+node = ">=0.2.0"
 platforms = ["macos-arm64", "linux-x86_64", "windows-x86_64"]
 
 [run]

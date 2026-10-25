@@ -25,7 +25,7 @@ A .blend's own scripts never run (`-Y`), whatever Blender's preferences say, and
 ## Commands
 
 Agents get each as a tool (`blender_preview`, `blender_render`), or call it on a machine with
-`run_on_machine`.
+`create_job`.
 
 | Kind | Params | What |
 |---|---|---|
