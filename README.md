@@ -29,8 +29,8 @@ Agents get each as a tool (`blender_preview`, `blender_render`), or call it on a
 
 | Kind | Params | What |
 |---|---|---|
-| `blender.preview` | `file`, `thread_id?` | A preview still (1280×720) and a USDZ of a .blend, .glb, .gltf, .fbx, .obj or .usd/.usda/.usdc/.usdz file. Cancellable |
-| `blender.render` | `file`, `frames?`, `scene?`, `camera?`, `samples?`, `output?`, `thread_id?` | Renders a .blend's frames in the background, one render at a time per machine (lane `gpu`). Cancellable and resumable |
+| `blender.preview` | `file`, `channel_id?` | A preview still (1280×720) and a USDZ of a .blend, .glb, .gltf, .fbx, .obj or .usd/.usda/.usdc/.usdz file. Cancellable |
+| `blender.render` | `file`, `frames?`, `scene?`, `camera?`, `samples?`, `output?`, `channel_id?` | Renders a .blend's frames in the background, one render at a time per machine (lane `gpu`). Cancellable and resumable |
 
 - **`frames`** is `1-250` or `1,5,10-20`. Left out, it's the scene's range.
 - **`output`** is a folder on the machine. Left out, frames go where the .blend says. Either way it must be
